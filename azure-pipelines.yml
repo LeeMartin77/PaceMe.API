@@ -1,0 +1,38 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+name: 0.1.$(Rev:r)
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+
+- task: UseDotNet@2
+  inputs:
+    version: '3.1.x'
+    packageType: sdk
+
+# Function app
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+  displayName: 'Build the Function App'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: False
+    arguments: '--no-build --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: True
+  displayName: 'Publish the Function App'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: PaceMe.FunctionApp
