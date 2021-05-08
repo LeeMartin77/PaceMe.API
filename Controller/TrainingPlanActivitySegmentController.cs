@@ -118,7 +118,8 @@ namespace PaceMe.FunctionApp.Controller
                 TrainingPlanActivityId = trainingPlanActivityId,
                 Order = segment.Order,
                 DurationSeconds = segment.DurationSeconds,
-                Notes = segment.Notes
+                Notes = segment.Notes,
+                SegmentGroup = segment.SegmentGroup
             };
 
             await _TrainingPlanActivitySegmentRepository.Create(createRecord);
@@ -162,7 +163,8 @@ namespace PaceMe.FunctionApp.Controller
                 TrainingPlanActivityId = trainingPlanActivityId,
                 Order = segment.Order,
                 DurationSeconds = segment.DurationSeconds,
-                Notes = segment.Notes
+                Notes = segment.Notes,
+                SegmentGroup = segment.SegmentGroup
             };
 
             await _TrainingPlanActivitySegmentRepository.Update(updateRecord);
@@ -234,7 +236,8 @@ namespace PaceMe.FunctionApp.Controller
                         TrainingPlanActivitySegmentId = segment.TrainingPlanActivitySegmentId,
                         Order = i,
                         DurationSeconds = segment.DurationSeconds,
-                        Notes = segment.Notes
+                        Notes = segment.Notes,
+                        SegmentGroup = segment.SegmentGroup
                     }
                 );
                 i++;
