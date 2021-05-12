@@ -124,12 +124,6 @@ namespace PaceMe.FunctionApp.Controller
 
             await _TrainingPlanActivitySegmentRepository.Create(createRecord);
             
-            var segments = await _TrainingPlanActivitySegmentRepository.GetForParentId(trainingPlanActivityId);
-
-            var orderedSegments = OrderAndReindexSegments(segments);
-
-            await Task.WhenAll(orderedSegments.Select(x => _TrainingPlanActivitySegmentRepository.Update(x)));
-            
             return new JsonResult(createRecord.TrainingPlanActivitySegmentId);
 
         }
@@ -169,12 +163,6 @@ namespace PaceMe.FunctionApp.Controller
 
             await _TrainingPlanActivitySegmentRepository.Update(updateRecord);
             
-            var segments = await _TrainingPlanActivitySegmentRepository.GetForParentId(trainingPlanActivityId);
-
-            var orderedSegments = OrderAndReindexSegments(segments);
-
-            await Task.WhenAll(orderedSegments.Select(x => _TrainingPlanActivitySegmentRepository.Update(x)));
-            
             return new OkResult();
 
         }
@@ -202,12 +190,6 @@ namespace PaceMe.FunctionApp.Controller
             }
 
             await _TrainingPlanActivitySegmentRepository.Delete(segment);
-
-            var segments = await _TrainingPlanActivitySegmentRepository.GetForParentId(trainingPlanActivityId);
-
-            var orderedSegments = OrderAndReindexSegments(segments);
-
-            await Task.WhenAll(orderedSegments.Select(x => _TrainingPlanActivitySegmentRepository.Update(x)));
             
             return new OkResult();
 
@@ -223,26 +205,6 @@ namespace PaceMe.FunctionApp.Controller
 
         private static bool InvalidRequest(Guid userId, TrainingPlanRecord trainingPlan){
             return trainingPlan == null || trainingPlan.UserId != userId;
-        }
-
-        private static IEnumerable<TrainingPlanActivitySegmentRecord> OrderAndReindexSegments(IEnumerable<TrainingPlanActivitySegmentRecord> records)
-        {
-            var orderedSegments = new List<TrainingPlanActivitySegmentRecord>();
-            int i = 1;
-            foreach(var segment in records.OrderBy(x => x.Order)){
-                orderedSegments.Add(
-                    new TrainingPlanActivitySegmentRecord {
-                        TrainingPlanActivityId = segment.TrainingPlanActivityId,
-                        TrainingPlanActivitySegmentId = segment.TrainingPlanActivitySegmentId,
-                        Order = i,
-                        DurationSeconds = segment.DurationSeconds,
-                        Notes = segment.Notes,
-                        SegmentGroup = segment.SegmentGroup
-                    }
-                );
-                i++;
-            }
-            return orderedSegments;
         }
     }
 }
