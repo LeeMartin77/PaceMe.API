@@ -1,0 +1,60 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "subscriptionId": {
+            "value": null
+        },
+        "name": {
+            "value": "pacemefunctionapp"
+        },
+        "location": {
+            "value": "UK South"
+        },
+        "hostingPlanName": {
+            "value": "pacemefunctionappplan"
+        },
+        "serverFarmResourceGroup": {
+            "value": "App.PaceMe.Info"
+        },
+        "alwaysOn": {
+            "value": false
+        },
+        "sku": {
+            "value": "Dynamic"
+        },
+        "skuCode": {
+            "value": "Y1"
+        },
+        "workerSize": {
+            "value": "0"
+        },
+        "workerSizeId": {
+            "value": "0"
+        },
+        "numberOfWorkers": {
+            "value": "1"
+        },
+        "use32BitWorkerProcess": {
+            "value": false
+        },
+        "linuxFxVersion": {
+            "value": "dotnet|3.1"
+        },
+        "storageAccountName": {
+            "value": "pacemefunctionapp"
+        },
+        "pacemeStorageAccountName": {
+            "value": "pacemestorageaccount"
+        },
+        "OpenIdConfig": {
+            "value": null
+        },
+        "ValidAudience": {
+            "value": null
+        },
+        "ValidIssuer": {
+            "value": null
+        }
+    }
+}
