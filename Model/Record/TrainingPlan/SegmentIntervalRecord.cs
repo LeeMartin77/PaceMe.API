@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace PaceMe.Model.Record
 {
-    public record TrainingPlanActivitySegmentIntervalRecord
+    public record SegmentIntervalRecord
     {
-        public Guid TrainingPlanActivitySegmentId { get; init; }
-        public Guid TrainingPlanActivitySegmentIntervalId { get; init; }
+        public Guid SegmentId { get; init; }
+        public Guid SegmentIntervalId { get; init; }
         public string Note { get; init; }
         public int Order { get; init; }
         public IntervalType Type { get; init; }

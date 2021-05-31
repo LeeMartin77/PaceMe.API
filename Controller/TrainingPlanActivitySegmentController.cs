@@ -27,13 +27,13 @@ namespace PaceMe.FunctionApp.Controller
         private readonly IRequestAuthenticator _requestAuthenticator;
         private readonly ITrainingPlanRepository _trainingPlanRepository;
         private readonly ITrainingPlanActivityRepository _TrainingPlanActivityRepository;
-        private readonly ITrainingPlanActivitySegmentRepository _TrainingPlanActivitySegmentRepository;
+        private readonly IActivitySegmentRepository _TrainingPlanActivitySegmentRepository;
 
         public TrainingPlanActivitySegmentController(
             IRequestAuthenticator requestAuthenticator,
             ITrainingPlanRepository trainingPlanRepository,
             ITrainingPlanActivityRepository TrainingPlanActivityRepository,
-            ITrainingPlanActivitySegmentRepository TrainingPlanActivitySegmentRepository
+            IActivitySegmentRepository TrainingPlanActivitySegmentRepository
             )
         {
             _requestAuthenticator = requestAuthenticator;
@@ -111,11 +111,11 @@ namespace PaceMe.FunctionApp.Controller
             }
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            TrainingPlanActivitySegmentRecord segment = JsonConvert.DeserializeObject<TrainingPlanActivitySegmentRecord>(requestBody);
+            ActivitySegmentRecord segment = JsonConvert.DeserializeObject<ActivitySegmentRecord>(requestBody);
 
-            TrainingPlanActivitySegmentRecord createRecord = new TrainingPlanActivitySegmentRecord {
-                TrainingPlanActivitySegmentId = Guid.NewGuid(),
-                TrainingPlanActivityId = trainingPlanActivityId,
+            ActivitySegmentRecord createRecord = new ActivitySegmentRecord {
+                ActivitySegmentId = Guid.NewGuid(),
+                ActivityId = trainingPlanActivityId,
                 Order = segment.Order,
                 // DurationSeconds = segment.DurationSeconds,
                 // Notes = segment.Notes,
@@ -124,7 +124,7 @@ namespace PaceMe.FunctionApp.Controller
 
             await _TrainingPlanActivitySegmentRepository.Create(createRecord);
             
-            return new JsonResult(createRecord.TrainingPlanActivitySegmentId);
+            return new JsonResult(createRecord.ActivitySegmentId);
 
         }
 
@@ -150,11 +150,11 @@ namespace PaceMe.FunctionApp.Controller
             }
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            TrainingPlanActivitySegmentRecord requestSegment = JsonConvert.DeserializeObject<TrainingPlanActivitySegmentRecord>(requestBody);
+            ActivitySegmentRecord requestSegment = JsonConvert.DeserializeObject<ActivitySegmentRecord>(requestBody);
 
-            TrainingPlanActivitySegmentRecord updateRecord = new TrainingPlanActivitySegmentRecord {
-                TrainingPlanActivitySegmentId = trainingPlanActivitySegmentId,
-                TrainingPlanActivityId = trainingPlanActivityId,
+            ActivitySegmentRecord updateRecord = new ActivitySegmentRecord {
+                ActivitySegmentId = trainingPlanActivitySegmentId,
+                ActivityId = trainingPlanActivityId,
                 Order = segment.Order,
                 // DurationSeconds = segment.DurationSeconds,
                 // Notes = segment.Notes,
@@ -195,8 +195,8 @@ namespace PaceMe.FunctionApp.Controller
 
         }
 
-        private static bool InvalidRequest(Guid userId, TrainingPlanRecord trainingPlan, TrainingPlanActivityRecord existingActivity, TrainingPlanActivitySegmentRecord existingSegment){
-            return InvalidRequest(userId, trainingPlan, existingActivity) || existingSegment == null || existingSegment.TrainingPlanActivityId != existingActivity.TrainingPlanActivityId;
+        private static bool InvalidRequest(Guid userId, TrainingPlanRecord trainingPlan, TrainingPlanActivityRecord existingActivity, ActivitySegmentRecord existingSegment){
+            return InvalidRequest(userId, trainingPlan, existingActivity) || existingSegment == null || existingSegment.ActivityId != existingActivity.TrainingPlanActivityId;
         }
 
         private static bool InvalidRequest(Guid userId, TrainingPlanRecord trainingPlan, TrainingPlanActivityRecord existingActivity){

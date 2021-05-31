@@ -35,7 +35,7 @@ namespace PaceMe.FunctionApp
 
             builder.Services.AddSingleton<ITrainingPlanRepository, TrainingPlanRepository>();
             builder.Services.AddSingleton<ITrainingPlanActivityRepository, TrainingPlanActivityRepository>();
-            builder.Services.AddSingleton<ITrainingPlanActivitySegmentRepository, TrainingPlanActivitySegmentRepository>();
+            builder.Services.AddSingleton<IActivitySegmentRepository, ActivitySegmentRepository>();
         }
     }
 

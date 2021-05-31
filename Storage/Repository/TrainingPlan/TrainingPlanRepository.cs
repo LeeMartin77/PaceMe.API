@@ -7,7 +7,7 @@ using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Extensions.Configuration;
 using PaceMe.Model.Record;
 
-namespace PaceMe.Storage.Repository 
+namespace PaceMe.Storage.Repository
 {
     public interface ITrainingPlanRepository : IBaseRepository<TrainingPlanRecord>
     {

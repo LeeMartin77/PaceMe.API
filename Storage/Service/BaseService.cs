@@ -11,6 +11,7 @@ namespace PaceMe.Storage.Service
     public interface IBaseService<T>
     {
         Task Create(T record);
+        Task<T> Get(Guid recordId);
         Task Update(T record);
         Task Delete(T record);
     }
