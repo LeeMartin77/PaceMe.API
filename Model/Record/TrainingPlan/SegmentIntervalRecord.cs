@@ -9,7 +9,7 @@ namespace PaceMe.Model.Record
         public Guid SegmentIntervalId { get; init; }
         public string Note { get; init; }
         public int Order { get; init; }
-        public IntervalType Type { get; init; }
+        public IntervalType IntervalType { get; init; }
         public int DistanceMeters { get; init; }
         public int DurationSeconds { get; init; }
     }

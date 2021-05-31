@@ -114,10 +114,8 @@ namespace PaceMe.FunctionApp.Controller
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             ActivitySegmentDTO segment = JsonConvert.DeserializeObject<ActivitySegmentDTO>(requestBody);
-
-            await _ActivitySegmentDTOService.Create(segment);
             
-            return new JsonResult(segment.ActivitySegmentId);
+            return new JsonResult(await _ActivitySegmentDTOService.Create(segment));
 
         }
 

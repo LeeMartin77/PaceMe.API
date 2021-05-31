@@ -7,6 +7,7 @@ using PaceMe.Storage.Utilities;
 using System;
 using PaceMe.Model.DTO;
 using PaceMe.Storage.Repository;
+using PaceMe.Model.Record;
 
 namespace PaceMe.Storage.Service 
 {
@@ -39,9 +40,28 @@ namespace PaceMe.Storage.Service
                 .ToArray();
         }
         
-        public async Task<Guid> Create(ActivitySegmentDTO record)
+        public async Task<Guid> Create(ActivitySegmentDTO activitySegment)
         {
-            throw new NotImplementedException();
+            (var activitySegmentRecord, var segmentIntervalRecords) = ActivitySegmentDTOBuilder.ToRecordSegmentTuple(activitySegment);
+            var createSegment = new ActivitySegmentRecord {
+                ActivityId = activitySegmentRecord.ActivityId,
+                ActivitySegmentId = Guid.NewGuid(),
+                Name = activitySegmentRecord.Name,
+                Order = activitySegmentRecord.Order,
+                Repetitions = activitySegmentRecord.Repetitions
+            };
+            var createIntervals = segmentIntervalRecords.Select(x => new SegmentIntervalRecord {
+                SegmentId = createSegment.ActivitySegmentId,
+                SegmentIntervalId = Guid.NewGuid(),
+                Note = x.Note,
+                Order = x.Order,
+                IntervalType = x.IntervalType,
+                DistanceMeters = x.DistanceMeters,
+                DurationSeconds = x.DurationSeconds
+            });
+            await _activitySegmentRepository.Create(createSegment);
+            await Task.WhenAll(createIntervals.Select(i => _segmentIntervalRepository.Create(i)));
+            return createSegment.ActivitySegmentId;
         }
 
         public async Task<ActivitySegmentDTO> Get(Guid recordId)
