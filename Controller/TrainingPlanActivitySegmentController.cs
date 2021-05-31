@@ -173,7 +173,7 @@ namespace PaceMe.FunctionApp.Controller
                 return new BadRequestResult();
             }
 
-            await _ActivitySegmentDTOService.Delete(segment);
+            await _ActivitySegmentDTOService.Delete(trainingPlanActivitySegmentId);
             
             return new OkResult();
 

@@ -8,11 +8,11 @@ using System;
 
 namespace PaceMe.Storage.Service 
 {
-    public interface IBaseService<T>
+    public interface IBaseService<T, ID>
     {
-        Task Create(T record);
-        Task<T> Get(Guid recordId);
+        Task<ID> Create(T record);
+        Task<T> Get(ID recordId);
         Task Update(T record);
-        Task Delete(T record);
+        Task Delete(ID record);
     }
 }
