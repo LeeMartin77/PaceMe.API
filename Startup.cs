@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
+using PaceMe.Storage.Service;
 
 [assembly: FunctionsStartup(typeof(PaceMe.FunctionApp.Startup))]
 
@@ -33,9 +34,12 @@ namespace PaceMe.FunctionApp
             });
             builder.Services.AddSingleton<IRequestAuthenticator, RequestAuthenticator>();
 
+            builder.Services.AddSingleton<IActivitySegmentDTOService, ActivitySegmentDTOService>();
+
             builder.Services.AddSingleton<ITrainingPlanRepository, TrainingPlanRepository>();
             builder.Services.AddSingleton<ITrainingPlanActivityRepository, TrainingPlanActivityRepository>();
             builder.Services.AddSingleton<IActivitySegmentRepository, ActivitySegmentRepository>();
+            builder.Services.AddSingleton<ISegmentIntervalRepository, SegmentIntervalRepository>();
         }
     }
 

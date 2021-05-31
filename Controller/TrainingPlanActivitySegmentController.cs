@@ -18,6 +18,8 @@ using PaceMe.Storage.Repository;
 using System.Security.Claims;
 using PaceMe.FunctionApp.Authentication;
 using System.Collections.Generic;
+using PaceMe.Storage.Service;
+using PaceMe.Model.DTO;
 
 namespace PaceMe.FunctionApp.Controller
 {
@@ -27,19 +29,19 @@ namespace PaceMe.FunctionApp.Controller
         private readonly IRequestAuthenticator _requestAuthenticator;
         private readonly ITrainingPlanRepository _trainingPlanRepository;
         private readonly ITrainingPlanActivityRepository _TrainingPlanActivityRepository;
-        private readonly IActivitySegmentRepository _TrainingPlanActivitySegmentRepository;
+        private readonly IActivitySegmentDTOService _ActivitySegmentDTOService;
 
         public TrainingPlanActivitySegmentController(
             IRequestAuthenticator requestAuthenticator,
             ITrainingPlanRepository trainingPlanRepository,
             ITrainingPlanActivityRepository TrainingPlanActivityRepository,
-            IActivitySegmentRepository TrainingPlanActivitySegmentRepository
+            IActivitySegmentDTOService ActivitySegmentDTOService
             )
         {
             _requestAuthenticator = requestAuthenticator;
             _trainingPlanRepository = trainingPlanRepository;
             _TrainingPlanActivityRepository = TrainingPlanActivityRepository;
-            _TrainingPlanActivitySegmentRepository = TrainingPlanActivitySegmentRepository;
+            _ActivitySegmentDTOService = ActivitySegmentDTOService;
         }
 
         [FunctionName("TrainingPlanActivitySegmentController_GetTrainingPlanActivitySegments")]
@@ -56,7 +58,7 @@ namespace PaceMe.FunctionApp.Controller
 
             var trainingPlan = await _trainingPlanRepository.GetById(trainingPlanId);
             var activity = await _TrainingPlanActivityRepository.GetById(trainingPlanActivityId);
-            var segments = await _TrainingPlanActivitySegmentRepository.GetForParentId(trainingPlanActivityId);
+            var segments = await _ActivitySegmentDTOService.GetForParentId(trainingPlanActivityId);
             
             if(InvalidRequest(userId, trainingPlan, activity)){
                 return new NotFoundResult();
@@ -82,7 +84,7 @@ namespace PaceMe.FunctionApp.Controller
 
             var trainingPlan = await _trainingPlanRepository.GetById(trainingPlanId);
             var activity = await _TrainingPlanActivityRepository.GetById(trainingPlanActivityId);
-            var segment = await _TrainingPlanActivitySegmentRepository.GetById(trainingPlanActivitySegmentId);
+            var segment = await _ActivitySegmentDTOService.Get(trainingPlanActivitySegmentId);
             
             if(InvalidRequest(userId, trainingPlan, activity, segment)){
                 return new NotFoundResult();
@@ -111,20 +113,11 @@ namespace PaceMe.FunctionApp.Controller
             }
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            ActivitySegmentRecord segment = JsonConvert.DeserializeObject<ActivitySegmentRecord>(requestBody);
+            ActivitySegmentDTO segment = JsonConvert.DeserializeObject<ActivitySegmentDTO>(requestBody);
 
-            ActivitySegmentRecord createRecord = new ActivitySegmentRecord {
-                ActivitySegmentId = Guid.NewGuid(),
-                ActivityId = trainingPlanActivityId,
-                Order = segment.Order,
-                // DurationSeconds = segment.DurationSeconds,
-                // Notes = segment.Notes,
-                // SegmentGroup = segment.SegmentGroup
-            };
-
-            await _TrainingPlanActivitySegmentRepository.Create(createRecord);
+            await _ActivitySegmentDTOService.Create(segment);
             
-            return new JsonResult(createRecord.ActivitySegmentId);
+            return new JsonResult(segment.ActivitySegmentId);
 
         }
 
@@ -143,25 +136,16 @@ namespace PaceMe.FunctionApp.Controller
 
             var trainingPlan = await _trainingPlanRepository.GetById(trainingPlanId);
             var activity = await _TrainingPlanActivityRepository.GetById(trainingPlanActivityId);
-            var segment = await _TrainingPlanActivitySegmentRepository.GetById(trainingPlanActivitySegmentId);
+            var segment = await _ActivitySegmentDTOService.Get(trainingPlanActivitySegmentId);
 
             if(InvalidRequest(userId, trainingPlan, activity, segment)){
                 return new NotFoundResult();
             }
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            ActivitySegmentRecord requestSegment = JsonConvert.DeserializeObject<ActivitySegmentRecord>(requestBody);
+            ActivitySegmentDTO updateSegment = JsonConvert.DeserializeObject<ActivitySegmentDTO>(requestBody);
 
-            ActivitySegmentRecord updateRecord = new ActivitySegmentRecord {
-                ActivitySegmentId = trainingPlanActivitySegmentId,
-                ActivityId = trainingPlanActivityId,
-                Order = segment.Order,
-                // DurationSeconds = segment.DurationSeconds,
-                // Notes = segment.Notes,
-                // SegmentGroup = segment.SegmentGroup
-            };
-
-            await _TrainingPlanActivitySegmentRepository.Update(updateRecord);
+            await _ActivitySegmentDTOService.Update(updateSegment);
             
             return new OkResult();
 
@@ -183,16 +167,20 @@ namespace PaceMe.FunctionApp.Controller
 
             var trainingPlan = await _trainingPlanRepository.GetById(trainingPlanId);
             var activity = await _TrainingPlanActivityRepository.GetById(trainingPlanActivityId);
-            var segment = await _TrainingPlanActivitySegmentRepository.GetById(trainingPlanActivitySegmentId);
+            var segment = await _ActivitySegmentDTOService.Get(trainingPlanActivitySegmentId);
 
             if(InvalidRequest(userId, trainingPlan, activity, segment)){
                 return new BadRequestResult();
             }
 
-            await _TrainingPlanActivitySegmentRepository.Delete(segment);
+            await _ActivitySegmentDTOService.Delete(segment);
             
             return new OkResult();
 
+        }
+
+        private static bool InvalidRequest(Guid userId, TrainingPlanRecord trainingPlan, TrainingPlanActivityRecord existingActivity, ActivitySegmentDTO existingSegment){
+            return InvalidRequest(userId, trainingPlan, existingActivity) || existingSegment == null || existingSegment.ActivityId != existingActivity.TrainingPlanActivityId;
         }
 
         private static bool InvalidRequest(Guid userId, TrainingPlanRecord trainingPlan, TrainingPlanActivityRecord existingActivity, ActivitySegmentRecord existingSegment){
