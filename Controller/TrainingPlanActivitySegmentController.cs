@@ -105,6 +105,13 @@ namespace PaceMe.FunctionApp.Controller
                 return new UnauthorizedResult();
             }
 
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+
+            ActivitySegmentDTO segment = JsonConvert.DeserializeObject<ActivitySegmentDTO>(requestBody);
+            if(trainingPlanActivityId != segment.ActivityId) {
+                return new BadRequestObjectResult("Request Activity Id and Path Activity Id Mismatch");
+            }
+
             var trainingPlan = await _trainingPlanRepository.GetById(trainingPlanId);
             var activity = await _TrainingPlanActivityRepository.GetById(trainingPlanActivityId);
 
@@ -112,8 +119,6 @@ namespace PaceMe.FunctionApp.Controller
                 return new NotFoundResult();
             }
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            ActivitySegmentDTO segment = JsonConvert.DeserializeObject<ActivitySegmentDTO>(requestBody);
             
             return new JsonResult(await _ActivitySegmentDTOService.Create(segment));
 
