@@ -10,16 +10,16 @@ namespace PaceMe.Model.Record
         public string Note { get; init; }
         public int Order { get; init; }
         public IntervalType IntervalType { get; init; }
-        public int DistanceMeters { get; init; }
-        public int DurationSeconds { get; init; }
+        public int? DistanceMeters { get; init; }
+        public int? DurationSeconds { get; init; }
     }
 
     public enum IntervalType 
     {
-        Distance,
         Duration,
+        Distance,
         DistanceDuration,
         PaceDuration,
-        PaceTime
+        PaceDistance
     }
 }
