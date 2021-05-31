@@ -7,9 +7,8 @@ namespace PaceMe.Model.Record
     {
         public Guid TrainingPlanActivityId { get; init; }
         public Guid TrainingPlanActivitySegmentId { get; init; }
+        public string Name { get; init; }
         public int Order { get; init; }
-        public int DurationSeconds { get; init; }
-        public string Notes { get; init; }
-        public Guid? SegmentGroup { get; init; }
+        public int Repetitions { get; init; }
     }
 }
