@@ -75,12 +75,18 @@ namespace PaceMe.Storage.Service
 
         public async Task Delete(Guid recordId)
         {
-            throw new NotImplementedException();
+            var segment = await _activitySegmentRepository.GetById(recordId);
+
+            var segmentIntervalRecords =  await _segmentIntervalRepository.GetForParentId(recordId);
+
+            await Task.WhenAll(segmentIntervalRecords.Select(i => _segmentIntervalRepository.Delete(i)).Append(_activitySegmentRepository.Delete(segment)));
         }
 
-        public async Task Update(ActivitySegmentDTO record)
+        public async Task Update(ActivitySegmentDTO activitySegment)
         {
-            throw new NotImplementedException();
+            (var activitySegmentRecord, var segmentIntervalRecords) = ActivitySegmentDTOBuilder.ToRecordSegmentTuple(activitySegment);
+
+            await Task.WhenAll(segmentIntervalRecords.Select(i => _segmentIntervalRepository.Update(i)).Append(_activitySegmentRepository.Update(activitySegmentRecord)));
         }
 
     }
