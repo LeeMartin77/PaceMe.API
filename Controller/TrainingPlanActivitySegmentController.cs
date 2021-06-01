@@ -154,10 +154,10 @@ namespace PaceMe.FunctionApp.Controller
                 return new BadRequestObjectResult("Segment Interval with Mismatched Segment Id");
             }
 
-            if(updateSegment.Intervals.Where(i => i.SegmentIntervalId != Guid.Empty && i.SegmentIntervalId != null).Select(i => i.SegmentIntervalId).Distinct().Count() > 1)
-            {
-                return new BadRequestObjectResult("Segment Interval Id Duplication is not allowed");
-            }
+            // if(updateSegment.Intervals.Where(i => i.SegmentIntervalId != Guid.Empty && i.SegmentIntervalId != null).Select(i => i.SegmentIntervalId).Distinct().Count() > 1)
+            // {
+            //     return new BadRequestObjectResult("Segment Interval Id Duplication is not allowed");
+            // }
 
             var trainingPlan = await _trainingPlanRepository.GetById(trainingPlanId);
             var activity = await _TrainingPlanActivityRepository.GetById(trainingPlanActivityId);
