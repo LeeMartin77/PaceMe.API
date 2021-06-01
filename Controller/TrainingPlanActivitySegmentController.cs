@@ -86,7 +86,8 @@ namespace PaceMe.FunctionApp.Controller
             var activity = await _TrainingPlanActivityRepository.GetById(trainingPlanActivityId);
             var segment = await _ActivitySegmentDTOService.Get(trainingPlanActivitySegmentId);
             
-            if(InvalidRequest(userId, trainingPlan, activity, segment)){
+            if(InvalidRequest(userId, trainingPlan, activity, segment))
+            {
                 return new NotFoundResult();
             }
 
@@ -108,14 +109,22 @@ namespace PaceMe.FunctionApp.Controller
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
 
             ActivitySegmentDTO segment = JsonConvert.DeserializeObject<ActivitySegmentDTO>(requestBody);
-            if(trainingPlanActivityId != segment.ActivityId) {
+
+            if(segment.Intervals.Any(i => i.SegmentId != segment.ActivitySegmentId))
+            {
+                return new BadRequestObjectResult("Segment Interval with Mismatched Segment Id");
+            }
+
+            if(trainingPlanActivityId != segment.ActivityId)
+            {
                 return new BadRequestObjectResult("Request Activity Id and Path Activity Id Mismatch");
             }
 
             var trainingPlan = await _trainingPlanRepository.GetById(trainingPlanId);
             var activity = await _TrainingPlanActivityRepository.GetById(trainingPlanActivityId);
 
-            if(InvalidRequest(userId, trainingPlan)){
+            if(InvalidRequest(userId, trainingPlan))
+            {
                 return new NotFoundResult();
             }
 
@@ -136,6 +145,19 @@ namespace PaceMe.FunctionApp.Controller
             if(! await _requestAuthenticator.AuthenticateRequest(userId, req)){
                 return new UnauthorizedResult();
             }
+            
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            ActivitySegmentDTO updateSegment = JsonConvert.DeserializeObject<ActivitySegmentDTO>(requestBody);
+
+            if(updateSegment.Intervals.Any(i => i.SegmentId != updateSegment.ActivitySegmentId))
+            {
+                return new BadRequestObjectResult("Segment Interval with Mismatched Segment Id");
+            }
+
+            if(updateSegment.Intervals.Where(i => i.SegmentIntervalId != Guid.Empty && i.SegmentIntervalId != null).Select(i => i.SegmentIntervalId).Distinct().Count() > 1)
+            {
+                return new BadRequestObjectResult("Segment Interval Id Duplication is not allowed");
+            }
 
             var trainingPlan = await _trainingPlanRepository.GetById(trainingPlanId);
             var activity = await _TrainingPlanActivityRepository.GetById(trainingPlanActivityId);
@@ -145,8 +167,10 @@ namespace PaceMe.FunctionApp.Controller
                 return new NotFoundResult();
             }
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            ActivitySegmentDTO updateSegment = JsonConvert.DeserializeObject<ActivitySegmentDTO>(requestBody);
+            if(updateSegment.Intervals.Any(i => i.SegmentIntervalId != Guid.Empty && i.SegmentIntervalId != null && !segment.Intervals.Select(x => x.SegmentIntervalId).Contains(i.SegmentIntervalId)))
+            {
+                return new BadRequestObjectResult("Segment Interval Id not found");
+            }
 
             await _ActivitySegmentDTOService.Update(updateSegment);
             

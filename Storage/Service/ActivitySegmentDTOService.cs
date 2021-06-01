@@ -85,9 +85,34 @@ namespace PaceMe.Storage.Service
         public async Task Update(ActivitySegmentDTO activitySegment)
         {
             (var activitySegmentRecord, var segmentIntervalRecords) = ActivitySegmentDTOBuilder.ToRecordSegmentTuple(activitySegment);
-
-            await Task.WhenAll(segmentIntervalRecords.Select(i => _segmentIntervalRepository.Update(i)).Append(_activitySegmentRepository.Update(activitySegmentRecord)));
+            var originalIntervals = await _segmentIntervalRepository.GetForParentId(activitySegment.ActivitySegmentId);
+            await Task.WhenAll(
+                segmentIntervalRecords.Select(interval => CreateUpdateOrDeleteInterval(originalIntervals, interval))
+                .Append(_activitySegmentRepository.Update(activitySegmentRecord))
+                );
         }
 
+        public Task CreateUpdateOrDeleteInterval(IEnumerable<SegmentIntervalRecord> originalIntervals, SegmentIntervalRecord interval)
+        {
+            if (interval.SegmentIntervalId == null || interval.SegmentIntervalId == Guid.Empty)
+            {
+                var createInterval = new SegmentIntervalRecord 
+                {
+                    SegmentId = interval.SegmentId,
+                    SegmentIntervalId = Guid.NewGuid(),
+                    Note = interval.Note,
+                    Order = interval.Order,
+                    IntervalType = interval.IntervalType,
+                    DistanceMeters = interval.DistanceMeters,
+                    DurationSeconds = interval.DurationSeconds
+                };
+                return _segmentIntervalRepository.Create(createInterval);
+            }
+            if(originalIntervals.Select(x => x.SegmentIntervalId).Contains(interval.SegmentIntervalId))
+            {
+                return _segmentIntervalRepository.Update(interval);
+            }
+            return _segmentIntervalRepository.Delete(interval);
+        }
     }
 }
