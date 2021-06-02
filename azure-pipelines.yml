@@ -27,6 +27,13 @@ steps:
 
 - task: DotNetCoreCLI@2
   inputs:
+    command: 'test'
+    workingDirectory: 'PaceMe.FunctionApp.Tests'
+    publishTestResults: true
+  displayName: 'Test the Function App'
+
+- task: DotNetCoreCLI@2
+  inputs:
     command: 'publish'
     publishWebProjects: False
     arguments: '--no-build --output $(Build.ArtifactStagingDirectory)'
