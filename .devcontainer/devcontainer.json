@@ -1,10 +1,10 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.166.1/containers/dotnet
 {
-	"name": "PaceMe.FunctionApp",
+	"name": "PaceMe.API",
 	"dockerComposeFile": "docker-compose.development.yml",
 	"service": "paceme-functionapp",
-	"workspaceFolder": "/workspaces/PaceMe.FunctionApp",
+	"workspaceFolder": "/workspaces/PaceMe.API",
 	"shutdownAction": "stopCompose",
 
 	// Set *default* container specific settings.json values on container create.

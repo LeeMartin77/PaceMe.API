@@ -13,7 +13,7 @@ services:
       - ValidAudience
       - ValidIssuer    
     volumes:
-      - ../:/workspaces/PaceMe.FunctionApp:cached
+      - ../:/workspaces/PaceMe.API:cached
 
     # [Optional] Required for ptrace-based debuggers like C++, Go, and Rust
     cap_add:

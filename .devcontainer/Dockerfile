@@ -12,4 +12,6 @@ RUN /tmp/scripts/azurefunctions.sh
 RUN apt-get clean -y 
 RUN rm -rf /var/lib/apt/lists/* /tmp/library-scripts
 
+WORKDIR /workspaces/PaceMe.API/PaceMe.FunctionApp
+
 CMD func start --build
