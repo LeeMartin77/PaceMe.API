@@ -92,7 +92,7 @@ namespace PaceMe.Storage.Service
                 );
         }
 
-        public Task CreateUpdateOrDeleteInterval(IEnumerable<SegmentIntervalRecord> originalIntervals, SegmentIntervalRecord interval)
+        private Task CreateUpdateOrDeleteInterval(IEnumerable<SegmentIntervalRecord> originalIntervals, SegmentIntervalRecord interval)
         {
             if (interval.SegmentIntervalId == null || interval.SegmentIntervalId == Guid.Empty)
             {
