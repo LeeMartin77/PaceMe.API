@@ -9,10 +9,10 @@ using PaceMe.Model.Record;
 using PaceMe.Storage.Repository;
 using PaceMe.Storage.Service;
 
-namespace PaceMe.FunctionApp.Tests.Storage.Service
+namespace PaceMe.FunctionApp.Tests.Storage.Service.ActivitySegmentDTOServiceTests
 {
     [TestClass]
-    public class ActivitySegmentDTOServiceTests
+    public class ActivitySegmentDTOService_GivenCreate
     {
         private Mock<IActivitySegmentRepository> _mockActivitySegmentRepository;
         private Mock<ISegmentIntervalRepository> _mockSegmentIntervalRepository;
@@ -24,7 +24,7 @@ namespace PaceMe.FunctionApp.Tests.Storage.Service
         }
 
         [TestMethod]
-        public async Task GivenCreate_WhenSegment_ThenReturnsNewSegmentGuid()
+        public async Task WhenSegment_ThenReturnsNewSegmentGuid()
         {
             var inputDTO = new ActivitySegmentDTO
             {
@@ -49,7 +49,7 @@ namespace PaceMe.FunctionApp.Tests.Storage.Service
         }
 
         [TestMethod]
-        public async Task GivenCreate_WhenSegmentIntervals_ThenSetsNewSegmentGuidOnAllIntervals()
+        public async Task WhenSegmentIntervals_ThenSetsNewSegmentGuidOnAllIntervals()
         {
             var inputDTO = new ActivitySegmentDTO
             {
