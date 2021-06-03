@@ -183,15 +183,14 @@ namespace PaceMe.FunctionApp.Tests.Storage.Service.ActivitySegmentDTOServiceTest
                 );
         }
 
-                [TestMethod]
+        [TestMethod]
         public async Task WhenIntervalsInAllStates_ThenSubmitsAllRequests()
         {
             Guid segmentGuid = Guid.Parse("770f326a-a8eb-48e4-972f-64500e289941");
 
             Guid segmentIntervalOneGuid = Guid.Parse("edebcfe2-0e06-4868-9654-d485071ac66f");
             Guid segmentIntervalTwoGuid = Guid.Parse("2cee99dd-6598-4c03-86f7-dfb023ebd46e");
-            Guid segmentIntervalThreeGuid = Guid.Parse("6069b4b0-ef3a-490d-82a2-5f45735f5598");
-
+            
             var mockSegmentRecord = new ActivitySegmentRecord 
                 { 
                     ActivitySegmentId = segmentGuid,
@@ -243,9 +242,9 @@ namespace PaceMe.FunctionApp.Tests.Storage.Service.ActivitySegmentDTOServiceTest
             Assert.AreEqual(1, callbackDeleteIntervals.Count());
             Assert.AreEqual(segmentGuid, callbackSegments[0].ActivitySegmentId);
             Assert.AreEqual(createNote, callbackCreateIntervals[0].Note);
-            Assert.AreEqual(segmentIntervalTwoGuid, callbackUpdateIntervals[0].SegmentIntervalId);
+            Assert.AreEqual(segmentIntervalOneGuid, callbackUpdateIntervals[0].SegmentIntervalId);
             Assert.AreEqual(updateNote, callbackUpdateIntervals[0].Note);
-            Assert.AreEqual(segmentIntervalThreeGuid, callbackDeleteIntervals[0].SegmentIntervalId);
+            Assert.AreEqual(segmentIntervalTwoGuid, callbackDeleteIntervals[0].SegmentIntervalId);
         }
     }
 }
