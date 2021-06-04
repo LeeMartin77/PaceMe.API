@@ -38,8 +38,7 @@ namespace PaceMe.FunctionApp.Controller
         [FunctionName("TrainingPlanController_GetTrainingPlans")]
         public async Task<IActionResult> GetTrainingPlans(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = Route)] HttpRequest req,
-            Guid userId,
-            ILogger log)
+            Guid userId)
         {
             if(! await _requestAuthenticator.AuthenticateRequest(userId, req)){
                 return new UnauthorizedResult();
