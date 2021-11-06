@@ -7,8 +7,9 @@ FROM mcr.microsoft.com/vscode/devcontainers/dotnetcore:0-3.1
 RUN mkdir /tmp/scripts
 COPY ./scripts /tmp/scripts
 
-RUN /tmp/scripts/azcli-debian.sh;
+RUN /tmp/scripts/azcli-debian.sh
 RUN /tmp/scripts/azurefunctions.sh
+RUN /tmp/scripts/terraform.sh
 RUN apt-get clean -y 
 RUN rm -rf /var/lib/apt/lists/* /tmp/library-scripts
 
