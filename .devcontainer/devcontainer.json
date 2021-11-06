@@ -16,7 +16,9 @@
 	"extensions": [
 		"ms-dotnettools.csharp",
 		"ms-azuretools.vscode-azurefunctions",
-		"formulahendry.dotnet-test-explorer"
+		"formulahendry.dotnet-test-explorer",
+		"github.vscode-pull-request-github",
+		"eamodio.gitlens"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
