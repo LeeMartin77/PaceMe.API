@@ -18,7 +18,8 @@
 		"ms-azuretools.vscode-azurefunctions",
 		"formulahendry.dotnet-test-explorer",
 		"github.vscode-pull-request-github",
-		"eamodio.gitlens"
+		"eamodio.gitlens",
+		"hashicorp.terraform"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
