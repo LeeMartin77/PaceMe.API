@@ -78,7 +78,7 @@ resource "azurerm_application_insights" "pacemeapi" {
 }
 
 resource "azurerm_function_app" "pacemeapi" {
-  name                       = join("", ["paceme-api-serviceplan-",var.environment])
+  name                       = join("", ["paceme-api-",var.environment])
   location                   = azurerm_resource_group.pacemeapi.location
   resource_group_name        = azurerm_resource_group.pacemeapi.name
   app_service_plan_id        = azurerm_app_service_plan.pacemeapi.id
