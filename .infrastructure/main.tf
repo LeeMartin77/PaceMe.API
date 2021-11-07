@@ -85,6 +85,13 @@ resource "azurerm_function_app" "pacemeapi" {
   storage_account_name       = azurerm_storage_account.pacemeapi.name
   storage_account_access_key = azurerm_storage_account.pacemeapi.primary_access_key
   os_type                    = "linux"
+  site_config {
+    cors {
+      # TODO: Should probably not include localhost in certain environments
+      allowed_origins = ["https://localhost:5001", "https://app.paceme.info", "https://app-${var.environment}.paceme.info"]
+      support_credentials = true
+    }
+  }
   app_settings = {
       "FUNCTIONS_EXTENSION_VERSION" = "~3"
       "FUNCTIONS_WORKER_RUNTIME" = "dotnet"
