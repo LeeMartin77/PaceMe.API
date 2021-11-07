@@ -63,7 +63,7 @@ resource "azurerm_app_service_plan" "pacemeapi" {
   location            = azurerm_resource_group.pacemeapi.location
   resource_group_name = azurerm_resource_group.pacemeapi.name
   kind                = "FunctionApp"
-
+  reserved            = true
   sku {
     tier = "Dynamic"
     size = "Y1"
@@ -84,6 +84,7 @@ resource "azurerm_function_app" "pacemeapi" {
   app_service_plan_id        = azurerm_app_service_plan.pacemeapi.id
   storage_account_name       = azurerm_storage_account.pacemeapi.name
   storage_account_access_key = azurerm_storage_account.pacemeapi.primary_access_key
+  os_type                    = "linux"
   app_settings = {
       "FUNCTIONS_EXTENSION_VERSION" = "~3"
       "FUNCTIONS_WORKER_RUNTIME" = "dotnet"
