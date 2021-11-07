@@ -15,4 +15,6 @@ RUN rm -rf /var/lib/apt/lists/* /tmp/library-scripts
 
 WORKDIR /workspaces/PaceMe.API/PaceMe.FunctionApp
 
+ENV HOME /home/vscode
+
 CMD func start --build

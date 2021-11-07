@@ -11,9 +11,12 @@ services:
       - AzureWebJobsStorage=UseDevelopmentStorage=true;DevelopmentStorageProxyUri=http://paceme-function-storage;
       - OpenIdConfig
       - ValidAudience
-      - ValidIssuer    
+      - ValidIssuer
     volumes:
       - ../:/workspaces/PaceMe.API:cached
+      - type: bind
+        source: ~/.ssh
+        target: /home/vscode/.ssh
 
     # [Optional] Required for ptrace-based debuggers like C++, Go, and Rust
     cap_add:
